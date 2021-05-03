@@ -112,6 +112,11 @@ class PlayerB(Player):
         self.alpha *= self.alpha_decay
 
 
+class PlayerC(Player):
+    def strategy(self, action_a):
+        return int(np.random.random() < 0.6)
+
+
 def play_hand(strategy_a: callable, strategy_b: callable) -> int:
     """Play one hand of mini-poker.
 
@@ -183,13 +188,28 @@ if __name__ == '__main__':
         print("Congrats, you won.")
     else:
         print("You lost.")
-    print(f'Average reward at the end of {N} games:', ortalama_kazanc)
+    print(f'average reward at the end of {N} games:', ortalama_kazanc)
 
     b = PlayerB(0.001, 0, 0.9999, 1.0)
     a = PlayerA()
     rews = []
     for i in range(N):
         rew = play_hand(a, b)
+        rews.append(rew)
+
+    ortalama_kazanc = np.mean(rews)
+    print('Alpha not decaying:')
+    if ortalama_kazanc >= 0.:
+        print("Congrats, you won.")
+    else:
+        print("You lost.")
+    print(f'Average reward at the end of {N} games:', ortalama_kazanc)
+
+    c = PlayerC()
+    a = PlayerA()
+    rews = []
+    for i in range(N):
+        rew = play_hand(a, c)
         rews.append(rew)
 
     ortalama_kazanc = np.mean(rews)
